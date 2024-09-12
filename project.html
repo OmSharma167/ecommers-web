@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Learning Support</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+        }
+
+        /* Main Content Styling */
+        main {
+            padding: 40px 20px;
+            background-color: #f4f4f4;
+        }
+
+        /* Features Section */
+        #features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-bottom: 40px;
+        }
+
+        .feature {
+            background-color: white;
+            width: 45%;
+            margin: 10px 0;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            color: #333;
+        }
+
+        /* Demo Section Styling */
+        #demo {
+            text-align: center;
+        }
+
+        #demo h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .interaction {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .interaction div {
+            width: 45%;
+            margin: 10px 0;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .interaction h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+
+        .interaction input[type="text"],
+        .interaction button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+            transition: border 0.2s ease;
+        }
+
+        .interaction input[type="text"]:focus,
+        .interaction button:hover {
+            border-color: #4CAF50;
+        }
+
+        /* Video Element for Screen Sharing */
+        #screenContainer {
+            position: relative;
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #screenVideo {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .fullscreen-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        /* Fullscreen styling */
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>Real-Time Learning Support</h1>
+        <p>Enhancing Classroom Experience Through Instant Help and Collaboration</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Key Features Section -->
+        <section id="features">
+            <h2>Key Features</h2>
+            <div class="feature">
+                <h3>AI Chatbot</h3>
+                <p>Get instant answers to your questions from our AI-powered chatbot.</p>
+            </div>
+            <div class="feature">
+                <h3>Peer Support</h3>
+                <p>Connect with your classmates in real-time for collaborative learning.</p>
+            </div>
+            <div class="feature">
+                <h3>Teacher Assistance</h3>
+                <p>Directly ask your teacher for help with complex questions.</p>
+            </div>
+            <div class="feature">
+                <h3>Screen Sharing</h3>
+                <p>Share your screen with friends or teachers to work through problems together.</p>
+            </div>
+        </section>
+
+        <!-- Demo Interaction Section -->
+        <section id="demo">
+            <h2>How It Works</h2>
+            <p>Interact with the app to experience real-time learning support:</p>
+            <div class="interaction">
+                <div class="chatbot-demo">
+                    <h4>Chatbot Interaction</h4>
+                    <input type="text" placeholder="Ask the chatbot...">
+                </div>
+                <div class="screen-share-demo">
+                    <h4>Screen Sharing</h4>
+                    <button id="shareScreenBtn">Share Screen</button>
+                    <div id="screenContainer">
+                        <video id="screenVideo" autoplay></video>
+                        <button id="fullscreenBtn" class="fullscreen-btn">Fullscreen</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Real-Time Learning Support. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shareScreenBtn = document.getElementById('shareScreenBtn');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const screenVideo = document.getElementById('screenVideo');
+            const screenContainer = document.getElementById('screenContainer');
+
+            shareScreenBtn.addEventListener('click', async () => {
+                try {
+                    const mediaStream = await navigator.mediaDevices.getDisplayMedia({
+                        video: true,
+                        audio: false
+                    });
+
+                    screenVideo.srcObject = mediaStream;
+
+                    mediaStream.getVideoTracks()[0].addEventListener('ended', () => {
+                        alert('Screen sharing stopped');
+                        screenVideo.srcObject = null;
+                    });
+                } catch (err) {
+                    console.error("Error: " + err);
+                    alert('Failed to start screen sharing');
+                }
+            });
+
+            fullscreenBtn.addEventListener('click', () => {
+                if (screenContainer.requestFullscreen) {
+                    screenContainer.requestFullscreen();
+                } else if (screenContainer.mozRequestFullScreen) { /* Firefox */
+                    screenContainer.mozRequestFullScreen();
+                } else if (screenContainer.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                    screenContainer.webkitRequestFullscreen();
+                } else if (screenContainer.msRequestFullscreen) { /* IE/Edge */
+                    screenContainer.msRequestFullscreen();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
